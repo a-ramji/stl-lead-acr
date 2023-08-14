@@ -1,0 +1,34 @@
+---
+title: "stl_lead_inequity"
+author: "Anna Ramji"
+format: html
+editor: visual
+execute:
+  warning: false
+---
+
+## Lead Inequity Data
+
+```{r}
+library(tidyverse)
+library(janitor)
+library(dplyr)
+```
+
+Reading in data
+
+```{r}
+stl_lead <- read_csv(here::here("data", "stl_lead.csv")) |> 
+  clean_names()
+```
+
+n a new code chunk, from `stl_lead` create a new data frame called `stl_lead_prop` that has one additional column called `prop_white` that returns the percent of each census tract identifying as white (variable `white` in the dataset divided by variable `totalPop`, times 100)
+
+dplyr::mutate(new_col = col_a / col_b)
+
+```{r}
+stl_lead_prop <- stl_lead |> 
+  mutate(prop_white = ((white/total_pop)*100))
+
+
+```
