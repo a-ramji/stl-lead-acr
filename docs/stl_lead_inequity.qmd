@@ -54,16 +54,46 @@ stl_lead_plot <- ggplot(data = stl_lead_prop,
                         aes(x = prop_white, 
                             y = pct_elevated)) +
   geom_point(aes(color = (pct_tested),
-                 size = (pct_tested), 
-                 alpha = 0.7)) +
+                 size = (pct_tested)), 
+                 alpha = 0.9
+                 ) +
+  scale_color_continuous(limits = c(0.0, 1.0), breaks = seq(0.0, 1.0, by = 0.1)) +
+  # scale_size_continuous(limits = c(0.0, 1.0), breaks = seq(0.0, 1.0, by = 0.1)) +
   labs(x = "% Identifying as White", y = "% Children with Elevated Blood Lead Levels") +
+  guides(color= guide_legend(), size=guide_legend()) +
   theme_minimal()
+```
+
+The overall trend we observe in this graph is that in this study, as the percentage of each census tract that identifies as white (x-axis) decreases, the percentage of children in each census tract with elevated blood lead levels increases.
+
+This scatter plot shows that in populations in which the proportion of white residents is near zero, the total percent of children in these populations with elevated blood lead concentration is highest.
+
+```{r}
+stl_lead_plot <- stl_lead_plot + scale_size_continuous(limits = c(0.0, 1.0), breaks = seq(0.0, 1.0, by = 0.1)) 
 
 stl_lead_plot
 
 ggsave(filename = here("figs", "stl_lead_plot.png"), stl_lead_plot, width = 6, height = 5)
 ```
 
-The overall trend we observe in this graph is that in this study, as the percentage of each census tract that identifies as white (x-axis) decreases, the percentage of children in each census tract with elevated blood lead levels increases.
+### **Create a histogram**
 
-This scatter plot shows that in populations in which the proportion of white residents is near zero, the total percent of children in these populations with elevated blood lead concentration is highest.
+-   Create a histogram of only the `pctElevated` column in the data frame (remember, this will only take one variable - the frequency is calculated for you by `geom_histogram`)
+
+-   Customize the fill, color, and size aesthetics - test some stuff! Feel free to make it awful.
+
+-   Once you\'ve played around with customization, export the histogram as a .jpg to the `figs` folder
+
+-   Make sure the histogram also shows up in your rendered html
+
+```{r}
+stl_lead_hist <- ggplot(data = stl_lead_prop) +
+  geom_histogram(aes(x = pct_elevated),
+                 fill = "blue",
+                 color = "black") +
+  theme_minimal()
+
+stl_lead_hist
+
+ggsave(filename = here("figs", "stl_lead_hist.png"))
+```
