@@ -13,6 +13,7 @@ execute:
 library(tidyverse)
 library(janitor)
 library(dplyr)
+library(here)
 ```
 
 Reading in data
@@ -28,7 +29,41 @@ dplyr::mutate(new_col = col_a / col_b)
 
 ```{r}
 stl_lead_prop <- stl_lead |> 
-  mutate(prop_white = ((white/total_pop)*100))
+  mutate(prop_white = ((white/total_pop)*100)) |> 
+  mutate(pct_tested = (count_tested / total_pop))
 
 
 ```
+
+### **Create a scatterplot**
+
+-   In a new code chunk, create a scatterplot graph of the percentage of children in each census tract with elevated blood lead levels (`pctElevated`) versus the percent of each census tract identifying as white.
+
+-   Customize by updating several aesthetics (e.g. size, opacity (see `alpha =`), color, etc.)
+
+-   Store the scatterplot as `stl_lead_plot`
+
+-   Have the scatterplot returned in the knitted html - customize the size that it appears when knitted
+
+-   Also save a .png of the scatterplot to `figs`, with dimensions of (6\" x 5\") (width x height)
+
+-   In text above or below the scatterplot, write 1 - 2 sentences describing the overall trend that you observe from your graph
+
+```{r}
+stl_lead_plot <- ggplot(data = stl_lead_prop, 
+                        aes(x = prop_white, 
+                            y = pct_elevated)) +
+  geom_point(aes(color = (pct_tested),
+                 size = (pct_tested), 
+                 alpha = 0.7)) +
+  labs(x = "% Identifying as White", y = "% Children with Elevated Blood Lead Levels") +
+  theme_minimal()
+
+stl_lead_plot
+
+ggsave(filename = here("figs", "stl_lead_plot.png"), stl_lead_plot, width = 6, height = 5)
+```
+
+The overall trend we observe in this graph is that in this study, as the percentage of each census tract that identifies as white (x-axis) decreases, the percentage of children in each census tract with elevated blood lead levels increases.
+
+This scatter plot shows that in populations in which the proportion of white residents is near zero, the total percent of children in these populations with elevated blood lead concentration is highest.
